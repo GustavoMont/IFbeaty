@@ -5,6 +5,11 @@ namespace IFBeaty.Models;
 
 public class Procedimento
 {
+    public Procedimento () 
+    { 
+        DataCriacao = DateTime.Now;
+        DataAtualizacao = DateTime.Now;
+    }
     [Required]
     public int Id { get; set; }
     [Required]

@@ -1,16 +1,24 @@
-using IFBeaty.Models;
+using IFBeaty.Dtos.Procedimentos;
+using IFBeaty.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IFBeaty.Controllers;
 
 [ApiController]
-[Route("/procedimentos")]
+[Route("procedimentos")]
 public class ProcedimentoController : ControllerBase
 {
-    public Procedimento Create([FromBody] Procedimento procedimentoData)
-    {   
-        Procedimento procedimento = new Procedimento();
+    private ProcedimentoServico _procedimentoServico;
 
-        return procedimento;
+    public ProcedimentoController([FromServices] ProcedimentoServico servico)
+    {
+        _procedimentoServico = servico;
+    }
+    
+    [HttpPost]
+    public void PostProcedimento
+        ([FromBody] ProcedimentoCriarAtualizarRequisicao  novoProcedimento) 
+    {
+        _procedimentoServico.CriarProvedimento(novoProcedimento);
     }
 }

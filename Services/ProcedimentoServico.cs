@@ -14,7 +14,7 @@ public class ProcedimentoServico
         _procedimentoRepositorio = procedimentoRepositorio;
     }
 
-    public void CriarProvedimento(ProcedimentoCriarAtualizarRequisicao novoProcedimento) 
+    public ProcedimentoResposta CriarProvedimento(ProcedimentoCriarAtualizarRequisicao novoProcedimento) 
     { 
         var procedimento = new Procedimento();
         procedimento.Nome = novoProcedimento.Nome;
@@ -22,5 +22,38 @@ public class ProcedimentoServico
         procedimento.Duracao = novoProcedimento.Duracao;
         procedimento.Descricao = novoProcedimento.Descricao;
         _procedimentoRepositorio.CriarProcedimento(procedimento);
+
+        var response = new ProcedimentoResposta();
+        response.Id = procedimento.Id;
+        response.Duracao = procedimento.Duracao;
+        response.Preco = procedimento.Preco;
+        response.Descricao = procedimento.Descricao;
+        response.Nome = procedimento.Nome;
+
+        return response;
     }
+    public List<ProcedimentoResposta> ListarProcedimentos()
+    {
+        var procedimentos = _procedimentoRepositorio.ListarProcedimentos();
+        List<ProcedimentoResposta> procedimentoResponse = new();
+        foreach (var procedimento in procedimentos)
+        {
+            ProcedimentoResposta procedimentoResposta = ModelToDto(procedimento);
+            procedimentoResponse.Add(procedimentoResposta);
+        }
+        return procedimentoResponse;
+    }
+
+    private ProcedimentoResposta ModelToDto(Procedimento procedimento)
+    {
+        var response = new ProcedimentoResposta();
+        response.Id = procedimento.Id;
+        response.Duracao = procedimento.Duracao;
+        response.Preco = procedimento.Preco;
+        response.Descricao = procedimento.Descricao;
+        response.Nome = procedimento.Nome;
+
+        return response;
+    }
+
 }

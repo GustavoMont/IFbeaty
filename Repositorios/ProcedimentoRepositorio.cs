@@ -11,9 +11,15 @@ public class ProcedimentoRepositorio
     { 
         _contextoDb = contexto;
     }
-    public void CriarProcedimento(Procedimento procedimento) 
+    public Procedimento CriarProcedimento(Procedimento procedimento) 
     { 
         _contextoDb.Procedimentos.Add(procedimento);
         _contextoDb.SaveChanges();
+
+        return procedimento;
+    }
+    public List<Procedimento> ListarProcedimentos()
+    {
+        return _contextoDb.Procedimentos.ToList();
     }
 }

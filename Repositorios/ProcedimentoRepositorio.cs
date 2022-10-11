@@ -22,4 +22,17 @@ public class ProcedimentoRepositorio
     {
         return _contextoDb.Procedimentos.ToList();
     }
+    public Procedimento BuscarPeloId(int id) 
+    {  
+        return _contextoDb.Procedimentos.FirstOrDefault(procedimento => procedimento.Id == id);
+    }
+    public void RemoverProcedimento(Procedimento procedimento) 
+    { 
+        _contextoDb.Remove(procedimento);
+        _contextoDb.SaveChanges();
+    }
+    public void AtualizarProcedimento()
+    {
+        _contextoDb.SaveChanges();
+    }
 }

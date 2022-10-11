@@ -26,4 +26,21 @@ public class ProcedimentoController : ControllerBase
     { 
         return _procedimentoServico.ListarProcedimentos();
     }
+    [HttpGet("{id:int}")]
+    public ProcedimentoResposta BuscarPeloId([FromRoute] int id) 
+    { 
+        return _procedimentoServico.BuscarPeloId(id);
+    }
+
+    [HttpDelete("{id:int}")]
+    public void RemoverProcedimento([FromRoute] int id) 
+    {
+        _procedimentoServico.RemoverProcedimento(id);
+    }
+    [HttpPut("{id:int}")]
+    public ProcedimentoResposta AtualizarProcedimento
+    ([FromRoute] int id, [FromBody] ProcedimentoCriarAtualizarRequisicao alteracoes)
+    {
+        return _procedimentoServico.AtualizarProcedimento(id, alteracoes);
+    }
 }

@@ -44,6 +44,43 @@ public class ProcedimentoServico
         return procedimentoResponse;
     }
 
+    public ProcedimentoResposta BuscarPeloId(int id) 
+    {  
+        var procedimento = _procedimentoRepositorio.BuscarPeloId(id);
+        return ModelToDto(procedimento);
+    }
+
+    public void RemoverProcedimento(int id) 
+    {
+        var procedimento = _procedimentoRepositorio.BuscarPeloId(id);
+        if (procedimento is null)
+        {
+            return;
+        }
+        _procedimentoRepositorio.RemoverProcedimento(procedimento);
+    }
+
+    public ProcedimentoResposta AtualizarProcedimento
+    (int id, ProcedimentoCriarAtualizarRequisicao alteracoes)
+    {
+        var procedimento = _procedimentoRepositorio.BuscarPeloId(id);
+        if (procedimento is null)
+        {
+            return null;
+        }
+        RequisicaoToModelo(alteracoes, procedimento);
+        return ModelToDto(procedimento);
+    }
+
+    private void RequisicaoToModelo
+    (ProcedimentoCriarAtualizarRequisicao requisicao, Procedimento modelo)
+    {
+        modelo.Duracao = requisicao.Duracao;
+        modelo.Nome = requisicao.Nome;
+        modelo.Descricao = requisicao.Descricao;
+        modelo.Preco = requisicao.Preco;
+    }
+
     private ProcedimentoResposta ModelToDto(Procedimento procedimento)
     {
         var response = new ProcedimentoResposta();

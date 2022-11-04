@@ -22,25 +22,48 @@ public class ProcedimentoController : ControllerBase
         return _procedimentoServico.CriarProvedimento(novoProcedimento);
     }
     [HttpGet]
-    public List<ProcedimentoResposta> ListarProcedimentos()
+    public ActionResult<List<ProcedimentoResposta>> ListarProcedimentos()
     { 
-        return _procedimentoServico.ListarProcedimentos();
+        return Ok(_procedimentoServico.ListarProcedimentos());
     }
     [HttpGet("{id:int}")]
-    public ProcedimentoResposta BuscarPeloId([FromRoute] int id) 
+    public ActionResult<ProcedimentoResposta> BuscarPeloId([FromRoute] int id) 
     { 
-        return _procedimentoServico.BuscarPeloId(id);
+        try
+        {
+            return Ok(_procedimentoServico.BuscarPeloId(id));
+        }
+        catch (Exception e)
+        {
+            
+            return NotFound(new { message = e.Message });
+        }
     }
 
     [HttpDelete("{id:int}")]
-    public void RemoverProcedimento([FromRoute] int id) 
+    public ActionResult RemoverProcedimento([FromRoute] int id) 
     {
-        _procedimentoServico.RemoverProcedimento(id);
+        try
+        {
+            _procedimentoServico.RemoverProcedimento(id);
+            return NoContent();
+        }
+        catch (Exception e)
+        {
+            return NotFound(new {message = e.Message} );
+        }
     }
     [HttpPut("{id:int}")]
     public ProcedimentoResposta AtualizarProcedimento
     ([FromRoute] int id, [FromBody] ProcedimentoCriarAtualizarRequisicao alteracoes)
     {
-        return _procedimentoServico.AtualizarProcedimento(id, alteracoes);
+        try
+        {
+            return _procedimentoServico.AtualizarProcedimento(id, alteracoes);
+        }
+        catch (Exception)
+        {
+            return null;
+        }
     }
 }

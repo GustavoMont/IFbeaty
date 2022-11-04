@@ -14,12 +14,22 @@ public class ProcedimentoServico
         _procedimentoRepositorio = procedimentoRepositorio;
     }
 
+    private Procedimento BuscarProcedimento(int id)
+    {
+        var procedimento = _procedimentoRepositorio.BuscarPeloId(id);
+        if (procedimento is null)
+        {
+            throw new Exception("Procedimento não encontrado");
+        }
+        return procedimento;
+    }
+
     public ProcedimentoResposta CriarProvedimento(ProcedimentoCriarAtualizarRequisicao novoProcedimento) 
     { 
         var procedimento = new Procedimento();
         procedimento.Nome = novoProcedimento.Nome;
-        procedimento.Preco = novoProcedimento.Preco;
-        procedimento.Duracao = novoProcedimento.Duracao;
+        procedimento.Preco = (decimal)novoProcedimento.Preco;
+        procedimento.Duracao = (int)novoProcedimento.Duracao;
         procedimento.Descricao = novoProcedimento.Descricao;
         _procedimentoRepositorio.CriarProcedimento(procedimento);
 
@@ -46,28 +56,20 @@ public class ProcedimentoServico
 
     public ProcedimentoResposta BuscarPeloId(int id) 
     {  
-        var procedimento = _procedimentoRepositorio.BuscarPeloId(id);
+        var procedimento = BuscarProcedimento(id);;
         return ModelToDto(procedimento);
     }
 
     public void RemoverProcedimento(int id) 
-    {
-        var procedimento = _procedimentoRepositorio.BuscarPeloId(id);
-        if (procedimento is null)
-        {
-            return;
-        }
+    {   
+        var procedimento = BuscarProcedimento(id);
         _procedimentoRepositorio.RemoverProcedimento(procedimento);
     }
 
     public ProcedimentoResposta AtualizarProcedimento
     (int id, ProcedimentoCriarAtualizarRequisicao alteracoes)
     {
-        var procedimento = _procedimentoRepositorio.BuscarPeloId(id);
-        if (procedimento is null)
-        {
-            return null;
-        }
+        var procedimento = BuscarProcedimento(id);
         RequisicaoToModelo(alteracoes, procedimento);
         return ModelToDto(procedimento);
     }
@@ -75,10 +77,10 @@ public class ProcedimentoServico
     private void RequisicaoToModelo
     (ProcedimentoCriarAtualizarRequisicao requisicao, Procedimento modelo)
     {
-        modelo.Duracao = requisicao.Duracao;
+        modelo.Duracao = (int)requisicao.Duracao;
         modelo.Nome = requisicao.Nome;
         modelo.Descricao = requisicao.Descricao;
-        modelo.Preco = requisicao.Preco;
+        modelo.Preco = (decimal)requisicao.Preco;
     }
 
     private ProcedimentoResposta ModelToDto(Procedimento procedimento)
